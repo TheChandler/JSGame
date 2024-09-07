@@ -1,23 +1,23 @@
 
 // Assorted functions
 
-import { ContextMenu } from "../code/ContextMenu.js";
+// import { ContextMenu } from "../code/ContextMenu.js";
 import { Circle, Polygon, Vector2 } from "./GameMath.js";
 import { IShape } from "./IShape.js";
 import { Menu } from "./menu/Menu.js";
 
-export function drawMenu(ctx, menu: ContextMenu) {
-    if (!menu) {
-        return
-    }
-    try {
-        for (let item of menu.options) {
-            item.draw(ctx)
-        }
-    } catch (e) {
-        console.error(e, menu)
-    }
-}
+// export function drawMenu(ctx, menu: ContextMenu) {
+//     if (!menu) {
+//         return
+//     }
+//     try {
+//         for (let item of menu.options) {
+//             item.draw(ctx)
+//         }
+//     } catch (e) {
+//         console.error(e, menu)
+//     }
+// }
 
 export function drawGrid(ctx) {
     ctx.strokeStyle = "#000"
