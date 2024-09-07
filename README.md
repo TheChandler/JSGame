@@ -1,2 +1,2 @@
 # JSGame
-My personal javascript game library
+Technically this is a typescript library I guess. 
