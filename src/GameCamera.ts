@@ -5,7 +5,7 @@ import { ShapeFactory } from "./ShapeFactory.js";
 const SPEED = 170;
 
 
-interface GameCamera extends CanvasRenderingContext2D{
+export interface GameCamera extends CanvasRenderingContext2D{
     position: VectorLike;
     size: VectorLike;
     /**

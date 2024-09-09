@@ -1,13 +1,16 @@
-import { shapeFactory } from "../../code/game.js";
+// import { shapeFactory } from "../../code/game.js";
 import { Polygon, Vector2 } from "../GameMath.js";
+import { ShapeFactory } from "../ShapeFactory.js";
 
 export class MenuItem {
     position: Vector2;
     box: Polygon;
     text: string;
     func: (x: number, y: number) => void;
+    shapeFactory: ShapeFactory;
 
-    constructor(x, y, text, func) {
+    constructor(x, y, text, func, shapeFactory) {
+        this.shapeFactory = shapeFactory;
         this.position = shapeFactory.createVector2(x, y)
         this.box = shapeFactory.createPolygon(
             [
@@ -25,7 +28,7 @@ export class MenuItem {
         if (debug) {
             console.log([x, y])
         }
-        return this.box.collides(shapeFactory.createVector2(x, y), debug)
+        return this.box.collides(this.shapeFactory.createVector2(x, y), debug)
     }
     click(x: number, y: number) {
         this.func(x, y);
