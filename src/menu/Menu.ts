@@ -25,7 +25,7 @@ export class Menu {
         this.hovered = ''
         this.boundShapes = [];
         this.boundShapeNames = []
-        this.isVisible = !this.pages[this.currentPage].hide ?? true;
+        this.isVisible = !(this.pages[this.currentPage].hide ?? true);
     }
     click(event) {
         let cords = this.ctx.convertScreenCordsToScreenCords(event.clientX, event.clientY)

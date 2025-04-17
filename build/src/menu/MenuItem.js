@@ -1,5 +1,6 @@
 export class MenuItem {
-    constructor(x, y, text, func) {
+    constructor(x, y, text, func, shapeFactory) {
+        this.shapeFactory = shapeFactory;
         this.position = shapeFactory.createVector2(x, y);
         this.box = shapeFactory.createPolygon([
             [x, y],
@@ -15,7 +16,7 @@ export class MenuItem {
         if (debug) {
             console.log([x, y]);
         }
-        return this.box.collides(shapeFactory.createVector2(x, y), debug);
+        return this.box.collides(this.shapeFactory.createVector2(x, y), debug);
     }
     click(x, y) {
         this.func(x, y);

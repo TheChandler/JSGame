@@ -1,16 +1,17 @@
-import { ctx, shapeFactory } from "../../code/game.js";
 export class Menu {
-    constructor(pages) {
+    constructor(pages, ctx, shapeFactory) {
         var _a;
+        this.ctx = ctx;
+        this.shapeFactory = shapeFactory;
         this.pages = pages;
         this.currentPage = Object.keys(pages)[0];
         this.hovered = '';
         this.boundShapes = [];
         this.boundShapeNames = [];
-        this.isVisible = (_a = !this.pages[this.currentPage].hide) !== null && _a !== void 0 ? _a : true;
+        this.isVisible = !((_a = this.pages[this.currentPage].hide) !== null && _a !== void 0 ? _a : true);
     }
     click(event) {
-        let cords = ctx.convertScreenCordsToScreenCords(event.clientX, event.clientY);
+        let cords = this.ctx.convertScreenCordsToScreenCords(event.clientX, event.clientY);
         let buttonClicked = this.testActivePageButtons(cords);
         let item;
         if (buttonClicked && (item = this.findItem(buttonClicked))) {
@@ -39,7 +40,7 @@ export class Menu {
         }
     }
     mousemove(event) {
-        let cords = ctx.convertScreenCordsToScreenCords(event.clientX, event.clientY);
+        let cords = this.ctx.convertScreenCordsToScreenCords(event.clientX, event.clientY);
         let button = this.testActivePageButtons(cords);
         this._hovered = button;
     }
@@ -62,13 +63,13 @@ export class Menu {
         this.hovered = state;
     }
     testActivePageButtons(cords) {
-        let point = shapeFactory.createVector2(cords[0], cords[1]);
+        let point = this.shapeFactory.createVector2(cords[0], cords[1]);
         let i = 0;
         // console.log("point", point)
         for (let { name } of this.activePage.items) {
             //If bound shapes array does not contain shape for menu name, create rectangle
             let button = this.boundShapes[this.boundShapeNames.indexOf(name)];
-            let collisionShape = shapeFactory.createPolygon([[50, i * 100], [50, (i * 100) + 90], [450, (i * 100) + 90], [450, i * 100]]);
+            let collisionShape = this.shapeFactory.createPolygon([[50, i * 100], [50, (i * 100) + 90], [450, (i * 100) + 90], [450, i * 100]]);
             if ((button && button.sprite.collides(point)) || (!this.activePage.hide && collisionShape && collisionShape.collides(point))) {
                 return name;
             }
@@ -82,13 +83,13 @@ export class Menu {
     render() {
         var _a;
         let i = 0;
-        ctx.font = "50px serif";
+        this.ctx.font = "50px serif";
         if (this.isVisible) {
             for (let option of Object.values(this.activePage.items)) {
-                ctx.fillStyle = (this.hovered == option.name) ? ('#0a0') : ((_a = option.color) !== null && _a !== void 0 ? _a : '#fff');
-                ctx.baseObj.fillRect(50, i * 100, 400, 90);
-                ctx.fillStyle = '#f00';
-                ctx.baseObj.fillText(option.name, 50, (i * 100) + 80);
+                this.ctx.fillStyle = (this.hovered == option.name) ? ('#0a0') : ((_a = option.color) !== null && _a !== void 0 ? _a : '#fff');
+                this.ctx.baseObj.fillRect(50, i * 100, 400, 90);
+                this.ctx.fillStyle = '#f00';
+                this.ctx.baseObj.fillText(option.name, 50, (i * 100) + 80);
                 i++;
             }
         }

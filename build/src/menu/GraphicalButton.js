@@ -1,4 +1,3 @@
-import { canvas, staticShapeFactory } from "../../code/game.js";
 export class GraphicalButton {
     /**
      *
@@ -9,9 +8,12 @@ export class GraphicalButton {
      * @param w the width of the button as % of screen size
      * @param h the height of the button as % of width.
      */
-    constructor(img_unhovered, img_hovered, x, y, w, h) {
+    constructor(img_unhovered, img_hovered, x, y, w, h, canvas, shapeFactory, staticShapeFactory) {
         this.hovered = false;
         console.log(x, y, w, h);
+        this.canvas = canvas;
+        this.shapeFactory = shapeFactory;
+        this.staticShapeFactory = staticShapeFactory;
         this.image_unhovered = img_unhovered;
         this.image_hovered = img_hovered;
         this.x = x;
