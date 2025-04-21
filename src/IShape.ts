@@ -6,6 +6,7 @@ export interface IShape {
     draw: (color: string, offset?: VectorLike) => void
 }
 
-export abstract class Shape{
-    
+export abstract class Shape implements IShape{
+    abstract draw(color: string, offset?: VectorLike): void;
+
 }
