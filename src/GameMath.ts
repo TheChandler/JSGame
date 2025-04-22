@@ -271,6 +271,14 @@ export class Sprite {
     ctx: CanvasRenderingContext2D;
 
     collides(shape, debug=false) {
+        if (shape instanceof Vector2){
+            return (
+                shape.x >= this.x &&
+                shape.x <= this.x + this.width &&
+                shape.y >= this.y &&
+                shape.y <= this.y + this.height
+            )
+        }
         return this.polygon.collides(shape, debug);
     }
     draw(offset?) {
