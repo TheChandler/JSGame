@@ -22,7 +22,7 @@ export class Input {
         })
         document.addEventListener('mouseup', () => {
             this.keys['mouseleft'] = false
-        }
+        })
     }
     addFunction(key, func) {
         this.functions[key] = func;
