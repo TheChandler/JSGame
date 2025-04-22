@@ -17,6 +17,12 @@ export class Input {
             let key = event.key;
             this.keys[key] = false;
         })
+        document.addEventListener('mousedown', () => {
+            this.keys['mouseleft'] = true
+        })
+        document.addEventListener('mouseup', () => {
+            this.keys['mouseleft'] = false
+        }
     }
     addFunction(key, func) {
         this.functions[key] = func;
