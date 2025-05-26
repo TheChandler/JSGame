@@ -1,5 +1,11 @@
 export class Vector2 {
     constructor(ctx, x, y) {
+        if (ctx instanceof Vector2) {
+            this.x = ctx.x;
+            this.y = ctx.y;
+            this.ctx = null;
+            return;
+        }
         this.x = x;
         this.y = y;
         this.ctx = ctx;
