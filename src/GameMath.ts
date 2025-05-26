@@ -1,7 +1,7 @@
 import { IShape, VectorLike } from "./IShape.js";
 
 export class Vector2 implements IShape {
-    constructor(ctx: CanvasRenderingContext2D|null, x: number, y: number) {
+    constructor(ctx: CanvasRenderingContext2D | null, x: number, y: number) {
         this.x = x;
         this.y = y;
         this.ctx = ctx;
@@ -14,6 +14,12 @@ export class Vector2 implements IShape {
         this.y += otherVec.y;
         return this;
     }
+    static distance(x1, y1, x2, y2) {
+        return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
+    }
+    static squareDistance(x1, y1, x2, y2) {
+        return ((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
+    }
     difference(otherVec: Vector2) {
         return new Vector2(this.ctx, this.x - otherVec.x, this.y - otherVec.y);
     }
@@ -25,7 +31,7 @@ export class Vector2 implements IShape {
     }
 
     draw(color) {
-        if (this.ctx){
+        if (this.ctx) {
             this.ctx.fillStyle = color ?? 'red';
             this.ctx.beginPath();
             this.ctx.arc(this.x, this.y, 5, 0, 2 * Math.PI);
@@ -121,6 +127,18 @@ export class Circle implements IShape {
     position: Vector2;
     radius: number;
     ctx: CanvasRenderingContext2D;
+    get x() {
+        return this.position.x;
+    }
+    get y() {
+        return this.position.y;
+    }
+    set x(num) {
+        this.position.x = num;
+    }
+    set y(num) {
+        this.position.y = num;
+    }
     collides(shape) {
         if (shape instanceof Vector2) {
             if (shape.distanceTo(this.position) < this.radius)
@@ -138,7 +156,7 @@ export class Circle implements IShape {
         this.ctx.arc(this.position.x + (offset?.x ?? 0), this.position.y + (offset?.y ?? 0), this.radius, 0, 2 * Math.PI);
         this.ctx.fill()
     }
-    drawOutline(color,lineWidth?, offset?) {
+    drawOutline(color, lineWidth?, offset?) {
         this.ctx.strokeStyle = color ?? 'red';
         this.ctx.lineWidth = lineWidth ?? 2
         this.ctx.beginPath();
@@ -162,8 +180,8 @@ export class Polygon implements IShape {
         })
         this.collided = false;
         let randomNum = ((Math.random() * .5 + .4) * 0xff) << 16
-        randomNum += ((Math.random() * .2 +.1) * 0xff) << 8
-        randomNum += ((Math.random() * .2 +.3) * 0xff)
+        randomNum += ((Math.random() * .2 + .1) * 0xff) << 8
+        randomNum += ((Math.random() * .2 + .3) * 0xff)
         this.color = "#" + Math.floor(randomNum).toString(16).padStart(6, '0') //+ 'C0';
         this.ctx = ctx;
     }
@@ -213,7 +231,7 @@ export class Polygon implements IShape {
             throw new Error("Unhandled collision type for Polygon and " + shape.constructor.name);
         }
     }
-    draw(color?:string, offset?: VectorLike) {
+    draw(color?: string, offset?: VectorLike) {
         let xOffset = 0;
         let yOffset = 0;
         if (offset) {
@@ -270,8 +288,8 @@ export class Sprite {
     polygon: Polygon;
     ctx: CanvasRenderingContext2D;
 
-    collides(shape, debug=false) {
-        if (shape instanceof Vector2){
+    collides(shape, debug = false) {
+        if (shape instanceof Vector2) {
             return (
                 shape.x >= this.x &&
                 shape.x <= this.x + this.width &&
@@ -279,12 +297,40 @@ export class Sprite {
                 shape.y <= this.y + this.height
             )
         }
+        if (shape instanceof Circle) {
+            return (
+                (
+                    shape.x >= this.x
+                    && shape.x <= this.x + this.width
+                    && shape.y >= this.y - shape.radius
+                    && shape.y <= this.y + this.height + shape.radius
+                ) || (
+                    shape.y >= this.y
+                    && shape.y <= this.y + this.height
+                    && shape.x >= this.x - shape.radius
+                    && shape.x <= this.x + this.width + shape.radius
+                ) || (
+                    (
+                        shape.x + shape.radius > this.x
+                        && shape.x - shape.radius < this.x + this.width
+                        && shape.y + shape.radius > this.y
+                        && shape.y - shape.radius < this.y + this.height
+                    )
+                    && (
+                        Vector2.distance(shape.x, shape.y, this.x, this.y)
+                        || Vector2.distance(shape.x, shape.y, this.x + this.width, this.y)
+                        || Vector2.distance(shape.x, shape.y, this.x, this.y + this.height)
+                        || Vector2.distance(shape.x, shape.y, this.x + this.width, this.y + this.height)
+                    )
+                )
+            )
+        }
         return this.polygon.collides(shape, debug);
     }
     draw(offset?) {
-        try{
+        try {
             this.ctx.drawImage(this.image, this.x + (offset?.x ?? 0), this.y + (offset?.y ?? 0), this.width, this.height);
-        }catch(e){
+        } catch (e) {
             console.error("Couldn't draw image", this.image)
         }
     }
