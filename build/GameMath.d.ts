@@ -5,6 +5,8 @@ export declare class Vector2 implements IShape {
     y: number;
     ctx: CanvasRenderingContext2D | null;
     add(otherVec: Vector2): this;
+    static distance(x1: any, y1: any, x2: any, y2: any): number;
+    static squareDistance(x1: any, y1: any, x2: any, y2: any): number;
     difference(otherVec: Vector2): Vector2;
     distanceTo(otherVec: Vector2): number;
     squaredDistanceTo(otherVec: Vector2): number;
@@ -27,6 +29,10 @@ export declare class Circle implements IShape {
     position: Vector2;
     radius: number;
     ctx: CanvasRenderingContext2D;
+    get x(): number;
+    get y(): number;
+    set x(num: number);
+    set y(num: number);
     collides(shape: any): boolean;
     draw(color: any, offset?: any): void;
     drawOutline(color: any, lineWidth?: any, offset?: any): void;
@@ -53,6 +59,6 @@ export declare class Sprite {
     height: number;
     polygon: Polygon;
     ctx: CanvasRenderingContext2D;
-    collides(shape: any, debug?: boolean): boolean;
+    collides(shape: any, debug?: boolean): number | boolean;
     draw(offset?: any): void;
 }

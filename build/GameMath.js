@@ -9,6 +9,12 @@ export class Vector2 {
         this.y += otherVec.y;
         return this;
     }
+    static distance(x1, y1, x2, y2) {
+        return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+    }
+    static squareDistance(x1, y1, x2, y2) {
+        return ((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+    }
     difference(otherVec) {
         return new Vector2(this.ctx, this.x - otherVec.x, this.y - otherVec.y);
     }
@@ -103,6 +109,18 @@ export class Circle {
         this.position = new Vector2(ctx, x, y);
         this.radius = r;
         this.ctx = ctx;
+    }
+    get x() {
+        return this.position.x;
+    }
+    get y() {
+        return this.position.y;
+    }
+    set x(num) {
+        this.position.x = num;
+    }
+    set y(num) {
+        this.position.y = num;
     }
     collides(shape) {
         if (shape instanceof Vector2) {
@@ -248,6 +266,22 @@ export class Sprite {
                 shape.x <= this.x + this.width &&
                 shape.y >= this.y &&
                 shape.y <= this.y + this.height);
+        }
+        if (shape instanceof Circle) {
+            return ((shape.x >= this.x
+                && shape.x <= this.x + this.width
+                && shape.y >= this.y - shape.radius
+                && shape.y <= this.y + this.height + shape.radius) || (shape.y >= this.y
+                && shape.y <= this.y + this.height
+                && shape.x >= this.x - shape.radius
+                && shape.x <= this.x + this.width + shape.radius) || ((shape.x + shape.radius > this.x
+                && shape.x - shape.radius < this.x + this.width
+                && shape.y + shape.radius > this.y
+                && shape.y - shape.radius < this.y + this.height)
+                && (Vector2.distance(shape.x, shape.y, this.x, this.y)
+                    || Vector2.distance(shape.x, shape.y, this.x + this.width, this.y)
+                    || Vector2.distance(shape.x, shape.y, this.x, this.y + this.height)
+                    || Vector2.distance(shape.x, shape.y, this.x + this.width, this.y + this.height))));
         }
         return this.polygon.collides(shape, debug);
     }
