@@ -5,3 +5,4 @@ export * from "./input";
 export * from "./Audio";
 export * from "./ShapeFactory";
 export * from "./MakeImage";
+export * from "./Shapes/Vector2";
