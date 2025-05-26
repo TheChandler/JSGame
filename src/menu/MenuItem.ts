@@ -1,5 +1,6 @@
 // import { shapeFactory } from "../../code/game.js";
-import { Polygon, Vector2 } from "../GameMath.js";
+import { Polygon } from "../GameMath.js";
+import { Vector2 } from "../Shapes/Vector2.js";
 import { ShapeFactory } from "../ShapeFactory.js";
 
 export class MenuItem {

@@ -1,4 +1,5 @@
-import { Polygon, Vector2 } from "./GameMath.js";
+import { Polygon } from "./GameMath.js";
+import { Vector2 } from "./Shapes/Vector2.js";
 export declare function drawGrid(ctx: any): void;
 export declare function findLevelBounds(shapes: Polygon[]): {
     maxX: number;

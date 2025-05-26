@@ -2,7 +2,8 @@
 // Assorted functions
 
 // import { ContextMenu } from "../code/ContextMenu.js";
-import { Circle, Polygon, Vector2 } from "./GameMath.js";
+import { Circle, Polygon } from "./GameMath.js";
+import { Vector2 } from "./Shapes/Vector2.js";
 import { IShape } from "./IShape.js";
 import { Menu } from "./menu/Menu.js";
 

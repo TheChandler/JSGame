@@ -1,6 +1,6 @@
 import { IMenu, IMenuItem } from "./IMenu.js";
 // import { ctx, shapeFactory } from "../../code/game.js";
-import { Polygon, Vector2 } from "../GameMath.js";
+import { Polygon } from "../GameMath.js";
 import { IShape } from "../IShape.js";
 import { GraphicalButton } from "./GraphicalButton.js";
 import { ShapeFactory } from "../ShapeFactory.js";

@@ -1,4 +1,4 @@
-import { Vector2 } from "./GameMath.js";
+import { Vector2 } from "./Shapes/Vector2.js";
 import { IShape, VectorLike } from "./IShape.js";
 import { ShapeFactory } from "./ShapeFactory.js";
 

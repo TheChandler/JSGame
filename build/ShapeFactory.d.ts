@@ -1,4 +1,5 @@
-import { Circle, Line, Polygon, Sprite, Vector2 } from "./GameMath.js";
+import { Circle, Line, Polygon, Sprite } from "./GameMath.js";
+import { Vector2 } from "./Shapes/Vector2.js";
 export declare class ShapeFactory {
     constructor(ctx: CanvasRenderingContext2D);
     ctx: CanvasRenderingContext2D;
