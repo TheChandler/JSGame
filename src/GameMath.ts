@@ -1,7 +1,13 @@
 import { IShape, VectorLike } from "./IShape.js";
 
 export class Vector2 implements IShape {
-    constructor(ctx: CanvasRenderingContext2D | null, x: number, y: number) {
+    constructor(ctx: CanvasRenderingContext2D | null |  Vector2, x: number, y: number) {
+        if (ctx instanceof Vector2){
+            this.x = ctx.x;
+            this.y = ctx.y;
+            this.ctx = null;
+            return
+        }
         this.x = x;
         this.y = y;
         this.ctx = ctx;
