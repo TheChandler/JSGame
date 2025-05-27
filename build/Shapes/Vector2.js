@@ -38,6 +38,10 @@ export class Vector2 {
             this.ctx.fill();
         }
     }
+    collides(shape) {
+        throw new Error("Collisions not implented on Vector2");
+        return false;
+    }
     toString() {
         return `[${this.x}, ${this.y}]`;
     }

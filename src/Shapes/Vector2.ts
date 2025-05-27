@@ -44,6 +44,10 @@ export class Vector2 implements IShape {
             this.ctx.fill();
         }
     }
+    collides(shape: IShape){
+        throw new Error("Collisions not implented on Vector2")
+        return false;
+    }
     toString() {
         return `[${this.x}, ${this.y}]`;
     }

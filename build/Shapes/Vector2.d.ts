@@ -11,6 +11,7 @@ export declare class Vector2 implements IShape {
     distanceTo(otherVec: Vector2): number;
     squaredDistanceTo(otherVec: Vector2): number;
     draw(color: any): void;
+    collides(shape: IShape): boolean;
     toString(): string;
     toJSON(): number[];
 }

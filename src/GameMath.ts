@@ -32,7 +32,7 @@ export class Line implements IShape {
     b: Vector2;
     length: number;
     ctx: CanvasRenderingContext2D;
-    collides(shape) {
+    collides(shape: IShape) {
         if (shape instanceof Vector2) {
             return shape.distanceTo(this.a) + shape.distanceTo(this.b) - this.length == 0;
         } else if (shape instanceof Circle) {
@@ -50,9 +50,9 @@ export class Line implements IShape {
                 console.log(shape.position)
                 return true
             }
-
+            return false;
         } else {
-            throw new Error("Unhandled collsions type for Line and ", shape.constructor.name)
+            throw new Error("Unhandled collsions type for Line and " + shape.constructor.name)
         }
     }
     distanceTo(point: Vector2) {

@@ -44,9 +44,10 @@ export class Line {
                 console.log(shape.position);
                 return true;
             }
+            return false;
         }
         else {
-            throw new Error("Unhandled collsions type for Line and ", shape.constructor.name);
+            throw new Error("Unhandled collsions type for Line and " + shape.constructor.name);
         }
     }
     distanceTo(point) {

@@ -6,7 +6,7 @@ export declare class Line implements IShape {
     b: Vector2;
     length: number;
     ctx: CanvasRenderingContext2D;
-    collides(shape: any): boolean | undefined;
+    collides(shape: IShape): boolean;
     distanceTo(point: Vector2): number;
     draw(color: any): void;
     toString(): string;
