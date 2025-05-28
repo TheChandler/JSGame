@@ -95,8 +95,11 @@ export class Circle {
         else if (shape instanceof Circle) {
             return shape.position.distanceTo(this.position) < this.radius + shape.radius;
         }
+        else if (shape instanceof Sprite) {
+            return shape.collides(this);
+        }
         else {
-            throw new Error("Unhandled collsions type for Line and ", shape.constructor.name);
+            throw new Error("Unhandled collsions type for Circle and ", shape.constructor.name);
         }
     }
     draw(color, offset) {
