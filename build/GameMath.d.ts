@@ -37,7 +37,7 @@ export declare class Polygon implements IShape {
     drawStatic(offset: any): void;
     printLines(): string;
 }
-export declare class Sprite {
+export declare class Sprite implements IShape {
     constructor(ctx: any, image: CanvasImageSource, x: number, y: number, width: number, height: number);
     image: CanvasImageSource;
     x: number;
@@ -46,6 +46,6 @@ export declare class Sprite {
     height: number;
     polygon: Polygon;
     ctx: CanvasRenderingContext2D;
-    collides(shape: any, debug?: boolean): number | boolean;
+    collides(shape: any, debug?: boolean): boolean;
     draw(offset?: any): void;
 }

@@ -223,7 +223,7 @@ export class Polygon implements IShape {
         return "[" + this.points.reduce((val, val2) => val + ", " + val2) + "]";
     }
 }
-export class Sprite {
+export class Sprite implements IShape {
     constructor(ctx, image: CanvasImageSource, x: number, y: number, width: number, height: number) {
         this.image = image;
 
@@ -275,10 +275,10 @@ export class Sprite {
                         && shape.y - shape.radius < this.y + this.height
                     )
                     && (
-                        Vector2.distance(shape.x, shape.y, this.x, this.y)
-                        || Vector2.distance(shape.x, shape.y, this.x + this.width, this.y)
-                        || Vector2.distance(shape.x, shape.y, this.x, this.y + this.height)
-                        || Vector2.distance(shape.x, shape.y, this.x + this.width, this.y + this.height)
+                        Vector2.distance(shape.x, shape.y, this.x, this.y) < shape.radius
+                        || Vector2.distance(shape.x, shape.y, this.x + this.width, this.y) < shape.radius
+                        || Vector2.distance(shape.x, shape.y, this.x, this.y + this.height) < shape.radius
+                        || Vector2.distance(shape.x, shape.y, this.x + this.width, this.y + this.height) < shape.radius
                     )
                 )
             )

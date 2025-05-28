@@ -242,10 +242,10 @@ export class Sprite {
                 && shape.x - shape.radius < this.x + this.width
                 && shape.y + shape.radius > this.y
                 && shape.y - shape.radius < this.y + this.height)
-                && (Vector2.distance(shape.x, shape.y, this.x, this.y)
-                    || Vector2.distance(shape.x, shape.y, this.x + this.width, this.y)
-                    || Vector2.distance(shape.x, shape.y, this.x, this.y + this.height)
-                    || Vector2.distance(shape.x, shape.y, this.x + this.width, this.y + this.height))));
+                && (Vector2.distance(shape.x, shape.y, this.x, this.y) < shape.radius
+                    || Vector2.distance(shape.x, shape.y, this.x + this.width, this.y) < shape.radius
+                    || Vector2.distance(shape.x, shape.y, this.x, this.y + this.height) < shape.radius
+                    || Vector2.distance(shape.x, shape.y, this.x + this.width, this.y + this.height) < shape.radius)));
         }
         return this.polygon.collides(shape, debug);
     }
