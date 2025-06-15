@@ -13,11 +13,10 @@ import { Vector2 } from "./Shapes/Vector2.js";
 //     }
 // }
 export class Line {
-    constructor(ctx, a, b) {
+    constructor(a, b) {
         try {
             this.a = a;
             this.b = b;
-            this.ctx = ctx;
         }
         catch (e) {
             console.error(e);
@@ -37,7 +36,7 @@ export class Line {
             if (dot < 0 || dot > 1) {
                 return false;
             }
-            let collide = shape.collides(new Vector2(this.ctx, this.a.x + dot * (this.b.x - this.a.x), this.a.y + dot * (this.b.y - this.a.y)));
+            let collide = shape.collides(new Vector2(this.a.x + dot * (this.b.x - this.a.x), this.a.y + dot * (this.b.y - this.a.y)));
             if (collide) {
                 console.log("Here is the collision");
                 console.log(this.a.x + dot * (this.b.x - this.a.x), this.a.y + dot * (this.b.y - this.a.y));
@@ -55,24 +54,16 @@ export class Line {
         if (dot < 0 || dot > 1) {
             return Math.min(point.distanceTo(this.a), point.distanceTo(this.b));
         }
-        return point.distanceTo(new Vector2(this.ctx, this.a.x + dot * (this.b.x - this.a.x), this.a.y + dot * (this.b.y - this.a.y)));
-    }
-    draw(color) {
-        // ctx.fillStyle = color ?? 'green'; //Lines don't fill
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.a.x, this.a.y);
-        this.ctx.lineTo(this.b.x, this.b.y);
-        this.ctx.stroke();
+        return point.distanceTo(new Vector2(this.a.x + dot * (this.b.x - this.a.x), this.a.y + dot * (this.b.y - this.a.y)));
     }
     toString() {
         return this.a + " " + this.b;
     }
 }
 export class Circle {
-    constructor(ctx, x, y, r) {
-        this.position = new Vector2(ctx, x, y);
+    constructor(x, y, r) {
+        this.position = new Vector2(x, y);
         this.radius = r;
-        this.ctx = ctx;
     }
     get x() {
         return this.position.x;
@@ -102,40 +93,20 @@ export class Circle {
             throw new Error("Unhandled collsions type for Circle and ", shape.constructor.name);
         }
     }
-    draw(color, offset) {
-        var _a, _b;
-        this.ctx.fillStyle = color !== null && color !== void 0 ? color : 'red';
-        this.ctx.beginPath();
-        this.ctx.arc(this.position.x + ((_a = offset === null || offset === void 0 ? void 0 : offset.x) !== null && _a !== void 0 ? _a : 0), this.position.y + ((_b = offset === null || offset === void 0 ? void 0 : offset.y) !== null && _b !== void 0 ? _b : 0), this.radius, 0, 2 * Math.PI);
-        this.ctx.fill();
-    }
-    drawOutline(color, lineWidth, offset) {
-        var _a, _b;
-        this.ctx.strokeStyle = color !== null && color !== void 0 ? color : 'red';
-        this.ctx.lineWidth = lineWidth !== null && lineWidth !== void 0 ? lineWidth : 2;
-        this.ctx.beginPath();
-        this.ctx.arc(this.position.x + ((_a = offset === null || offset === void 0 ? void 0 : offset.x) !== null && _a !== void 0 ? _a : 0), this.position.y + ((_b = offset === null || offset === void 0 ? void 0 : offset.y) !== null && _b !== void 0 ? _b : 0), this.radius, 0, 2 * Math.PI);
-        this.ctx.stroke();
-    }
 }
 export class Polygon {
-    constructor(ctx, points) {
+    constructor(points) {
         this.baseArray = points;
-        this.points = points.map(p => new Vector2(ctx, p[0], p[1]));
+        this.points = points.map(p => new Vector2(p[0], p[1]));
         this.lines = this.points.map((p, i, a) => {
             if (i < a.length - 1) {
-                return new Line(ctx, p, a[i + 1]);
+                return new Line(p, a[i + 1]);
             }
             if (i == a.length - 1) {
-                return new Line(ctx, p, a[0]);
+                return new Line(p, a[0]);
             }
         });
         this.collided = false;
-        let randomNum = ((Math.random() * .5 + .4) * 0xff) << 16;
-        randomNum += ((Math.random() * .2 + .1) * 0xff) << 8;
-        randomNum += ((Math.random() * .2 + .3) * 0xff);
-        this.color = "#" + Math.floor(randomNum).toString(16).padStart(6, '0'); //+ 'C0';
-        this.ctx = ctx;
     }
     collides(shape, debug) {
         var _a, _b;
@@ -178,33 +149,16 @@ export class Polygon {
             throw new Error("Unhandled collision type for Polygon and " + shape.constructor.name);
         }
     }
-    draw(color, offset) {
-        let xOffset = 0;
-        let yOffset = 0;
-        if (offset) {
-            xOffset = offset.x;
-            yOffset = offset.y;
-        }
-        this.ctx.fillStyle = (this.collided ? 'red' : this.color);
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.points[0].x + xOffset, this.points[0].y + yOffset);
-        for (let point of this.points) {
-            this.ctx.lineTo(point.x + xOffset, point.y + yOffset);
-        }
-        this.ctx.closePath();
-        this.ctx.fill();
-    }
     //todo: Fix this. Create type for new object made by createCamera. Check if object is of that type then don't run this if it isn't
-    drawStatic(offset) {
-        var _a, _b, _c;
-        this.ctx.baseObj.beginPath();
-        this.ctx.baseObj.moveTo(this.points[0].x + ((_a = offset === null || offset === void 0 ? void 0 : offset.x) !== null && _a !== void 0 ? _a : 0), this.points[0].y + (offset === null || offset === void 0 ? void 0 : offset.y));
-        for (let point of this.points) {
-            this.ctx.baseObj.lineTo(point.x + ((_b = offset === null || offset === void 0 ? void 0 : offset.x) !== null && _b !== void 0 ? _b : 0), point.y + ((_c = offset === null || offset === void 0 ? void 0 : offset.y) !== null && _c !== void 0 ? _c : 0));
-        }
-        this.ctx.baseObj.closePath();
-        this.ctx.baseObj.fill();
-    }
+    // drawStatic(offset) {
+    //     (<{ baseObj: any }><unknown>this.ctx).baseObj.beginPath();
+    //     (<{ baseObj: any }><unknown>this.ctx).baseObj.moveTo(this.points[0].x + (offset?.x ?? 0), this.points[0].y + (offset?.y))
+    //     for (let point of this.points) {
+    //         (<{ baseObj: any }><unknown>this.ctx).baseObj.lineTo(point.x + (offset?.x ?? 0), point.y + (offset?.y ?? 0));
+    //     }
+    //     (<{ baseObj: any }><unknown>this.ctx).baseObj.closePath();
+    //     (<{ baseObj: any }><unknown>this.ctx).baseObj.fill();
+    // }
     printLines() {
         // for (let line of this.lines) {
         //     console.log(line.toString());
@@ -214,18 +168,16 @@ export class Polygon {
     }
 }
 export class Sprite {
-    constructor(ctx, image, x, y, width, height) {
-        this.image = image;
+    constructor(x, y, width, height) {
         // this.image = new Image()
         // this.image.src = './images/playButton.png'
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.polygon = new Polygon(ctx, [
+        this.polygon = new Polygon([
             [x, y], [x + width, y], [x + width, y + height], [x, y + height]
         ]);
-        this.ctx = ctx;
     }
     collides(shape, debug = false) {
         if (shape instanceof Vector2) {
@@ -251,14 +203,5 @@ export class Sprite {
                     || Vector2.distance(shape.x, shape.y, this.x + this.width, this.y + this.height) < shape.radius)));
         }
         return this.polygon.collides(shape, debug);
-    }
-    draw(offset) {
-        var _a, _b;
-        try {
-            this.ctx.drawImage(this.image, this.x + ((_a = offset === null || offset === void 0 ? void 0 : offset.x) !== null && _a !== void 0 ? _a : 0), this.y + ((_b = offset === null || offset === void 0 ? void 0 : offset.y) !== null && _b !== void 0 ? _b : 0), this.width, this.height);
-        }
-        catch (e) {
-            console.error("Couldn't draw image", this.image);
-        }
     }
 }

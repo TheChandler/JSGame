@@ -1,4 +1,4 @@
-import { Sprite } from "../GameMath.js";
+import { DrawableSprite } from "../DrawableShapes.js";
 export declare class GraphicalButton {
     /**
      *
@@ -17,7 +17,7 @@ export declare class GraphicalButton {
     y: number;
     w: number;
     h: number;
-    sprite: Sprite;
+    sprite: DrawableSprite;
     canvas: any;
     shapeFactory: any;
     staticShapeFactory: any;

@@ -2,10 +2,9 @@
 // Assorted functions
 
 // import { ContextMenu } from "../code/ContextMenu.js";
-import { Circle, Polygon } from "./GameMath.js";
+import { Polygon } from "./GameMath.js";
+import { DrawableCircle, DrawablePolygon } from "./main.js";
 import { Vector2 } from "./Shapes/Vector2.js";
-import { IShape } from "./IShape.js";
-import { Menu } from "./menu/Menu.js";
 
 // export function drawMenu(ctx, menu: ContextMenu) {
 //     if (!menu) {
@@ -76,15 +75,15 @@ export function printCanvas(shapes: Polygon[], exit: Polygon) {
     }
 
     document.body.append(canv)
-    let offset = new Vector2(ctx, -minX, -minY)
+    let offset = new Vector2(-minX, -minY)
     console.log(offset)
     for (let shape of shapes) {
-        let newShape = new Polygon(ctx, shape.baseArray.map(([x, y]) => [x + offset.x, y + offset.y]))
+        let newShape = new DrawablePolygon(ctx, shape.baseArray.map(([x, y]) => [x + offset.x, y + offset.y]))
         newShape.draw()
     }
-    let exitShape = new Polygon(ctx, exit.baseArray.map(([x, y]) => [x + offset.x, y + offset.y]))
+    let exitShape = new DrawablePolygon(ctx, exit.baseArray.map(([x, y]) => [x + offset.x, y + offset.y]))
     exitShape.draw("green")
-    new Circle(ctx, 500, 500, 165).draw('red', offset)
+    new DrawableCircle(ctx, 500, 500, 165).draw('red', offset)
 
     // var dataURL = canv.toDataURL("image/png");
     var dataBlob = canv.toBlob((blob) => {

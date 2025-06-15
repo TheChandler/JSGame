@@ -1,9 +1,9 @@
-import { Polygon } from "../GameMath.js";
-import { Vector2 } from "../Shapes/Vector2.js";
+import { DrawablePolygon } from "../DrawableShapes.js";
 import { ShapeFactory } from "../ShapeFactory.js";
+import { Vector2 } from "../Shapes/Vector2.js";
 export declare class MenuItem {
     position: Vector2;
-    box: Polygon;
+    box: DrawablePolygon;
     text: string;
     func: (x: number, y: number) => void;
     shapeFactory: ShapeFactory;

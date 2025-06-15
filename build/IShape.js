@@ -4,3 +4,5 @@ export class Shape {
         return false;
     }
 }
+export class DrawableShape extends Shape {
+}

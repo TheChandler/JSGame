@@ -1,4 +1,4 @@
-import { Circle, Line, Polygon, Sprite } from "./GameMath.js";
+import { DrawableCircle, DrawableLine, DrawablePolygon, DrawableSprite, DrawableVector2 } from "./DrawableShapes.js";
 import { Vector2 } from "./Shapes/Vector2.js";
 
 
@@ -10,22 +10,22 @@ export class ShapeFactory {
 
 
     createVector2(x: number, y: number) {
-        return new Vector2(this.ctx, x, y)
+        return new DrawableVector2(this.ctx, x, y)
     }
 
     createLine(a: Vector2, b: Vector2) {
-        return new Line(this.ctx, a, b)
+        return new DrawableLine(this.ctx, a, b)
     }
 
     createCircle(x: number, y: number, r: number) {
-        return new Circle(this.ctx, x, y, r)
+        return new DrawableCircle(this.ctx, x, y, r)
     }
 
     createPolygon(points: number[][]) {
-        return new Polygon(this.ctx, points);
+        return new DrawablePolygon(this.ctx, points);
     }
 
     createSprite(image, x, y, width, height){
-        return new Sprite(this.ctx, image, x, y, width, height)
+        return new DrawableSprite(this.ctx, image, x, y, width, height)
     }
 }

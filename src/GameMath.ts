@@ -17,11 +17,10 @@ import { Vector2 } from "./Shapes/Vector2.js";
 
 
 export class Line implements IShape {
-    constructor(ctx: CanvasRenderingContext2D, a: Vector2, b: Vector2) {
+    constructor(a: Vector2, b: Vector2) {
         try {
             this.a = a;
             this.b = b;
-            this.ctx = ctx;
         } catch (e) {
             console.error(e)
             throw new Error("Cannot create Line from " + a + " " + b);
@@ -31,7 +30,6 @@ export class Line implements IShape {
     a: Vector2;
     b: Vector2;
     length: number;
-    ctx: CanvasRenderingContext2D;
     collides(shape: IShape) {
         if (shape instanceof Vector2) {
             return shape.distanceTo(this.a) + shape.distanceTo(this.b) - this.length == 0;
@@ -43,7 +41,7 @@ export class Line implements IShape {
             if (dot < 0 || dot > 1) {
                 return false;
             }
-            let collide = shape.collides(new Vector2(this.ctx, this.a.x + dot * (this.b.x - this.a.x), this.a.y + dot * (this.b.y - this.a.y)))
+            let collide = shape.collides(new Vector2(this.a.x + dot * (this.b.x - this.a.x), this.a.y + dot * (this.b.y - this.a.y)))
             if (collide) {
                 console.log("Here is the collision")
                 console.log(this.a.x + dot * (this.b.x - this.a.x), this.a.y + dot * (this.b.y - this.a.y))
@@ -60,15 +58,8 @@ export class Line implements IShape {
         if (dot < 0 || dot > 1) {
             return Math.min(point.distanceTo(this.a), point.distanceTo(this.b));
         }
-        return point.distanceTo(new Vector2(this.ctx, this.a.x + dot * (this.b.x - this.a.x), this.a.y + dot * (this.b.y - this.a.y)))
+        return point.distanceTo(new Vector2( this.a.x + dot * (this.b.x - this.a.x), this.a.y + dot * (this.b.y - this.a.y)))
 
-    }
-    draw(color) {
-        // ctx.fillStyle = color ?? 'green'; //Lines don't fill
-        this.ctx.beginPath()
-        this.ctx.moveTo(this.a.x, this.a.y)
-        this.ctx.lineTo(this.b.x, this.b.y)
-        this.ctx.stroke();
     }
     toString() {
         return this.a + " " + this.b;
@@ -77,14 +68,12 @@ export class Line implements IShape {
 
 
 export class Circle implements IShape {
-    constructor(ctx: CanvasRenderingContext2D, x: number, y: number, r: number) {
-        this.position = new Vector2(ctx, x, y);
+    constructor(x: number, y: number, r: number) {
+        this.position = new Vector2(x, y);
         this.radius = r;
-        this.ctx = ctx;
     }
     position: Vector2;
     radius: number;
-    ctx: CanvasRenderingContext2D;
     get x() {
         return this.position.x;
     }
@@ -104,53 +93,33 @@ export class Circle implements IShape {
             return shape.distanceTo(this.position) < this.radius;
         } else if (shape instanceof Circle) {
             return shape.position.distanceTo(this.position) < this.radius + shape.radius;
-        }else if (shape instanceof Sprite ){
+        } else if (shape instanceof Sprite) {
             return shape.collides(this);
         } else {
             throw new Error("Unhandled collsions type for Circle and ", shape.constructor.name)
         }
     }
-    draw(color, offset?) {
-        this.ctx.fillStyle = color ?? 'red';
-        this.ctx.beginPath();
-        this.ctx.arc(this.position.x + (offset?.x ?? 0), this.position.y + (offset?.y ?? 0), this.radius, 0, 2 * Math.PI);
-        this.ctx.fill()
-    }
-    drawOutline(color, lineWidth?, offset?) {
-        this.ctx.strokeStyle = color ?? 'red';
-        this.ctx.lineWidth = lineWidth ?? 2
-        this.ctx.beginPath();
-        this.ctx.arc(this.position.x + (offset?.x ?? 0), this.position.y + (offset?.y ?? 0), this.radius, 0, 2 * Math.PI);
-        this.ctx.stroke()
-    }
 }
 
 
 export class Polygon implements IShape {
-    constructor(ctx: CanvasRenderingContext2D, points: number[][]) {
+    constructor(points: number[][]) {
         this.baseArray = points;
-        this.points = points.map(p => new Vector2(ctx, p[0], p[1]))
+        this.points = points.map(p => new Vector2(p[0], p[1]))
         this.lines = <Line[]>this.points.map((p, i, a) => {
             if (i < a.length - 1) {
-                return new Line(ctx, p, a[i + 1])
+                return new Line(p, a[i + 1])
             }
             if (i == a.length - 1) {
-                return new Line(ctx, p, a[0]);
+                return new Line(p, a[0]);
             }
         })
         this.collided = false;
-        let randomNum = ((Math.random() * .5 + .4) * 0xff) << 16
-        randomNum += ((Math.random() * .2 + .1) * 0xff) << 8
-        randomNum += ((Math.random() * .2 + .3) * 0xff)
-        this.color = "#" + Math.floor(randomNum).toString(16).padStart(6, '0') //+ 'C0';
-        this.ctx = ctx;
     }
     baseArray: number[][];
     points: Vector2[];
     lines: Line[];
     collided: boolean;
-    color: string;
-    ctx: CanvasRenderingContext2D;
 
     collides(shape: IShape, debug?: boolean) {
         // if (debug) {
@@ -191,32 +160,16 @@ export class Polygon implements IShape {
             throw new Error("Unhandled collision type for Polygon and " + shape.constructor.name);
         }
     }
-    draw(color?: string, offset?: VectorLike) {
-        let xOffset = 0;
-        let yOffset = 0;
-        if (offset) {
-            xOffset = offset.x;
-            yOffset = offset.y;
-        }
-        this.ctx.fillStyle = (this.collided ? 'red' : this.color);
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.points[0].x + xOffset, this.points[0].y + yOffset)
-        for (let point of this.points) {
-            this.ctx.lineTo(point.x + xOffset, point.y + yOffset);
-        }
-        this.ctx.closePath();
-        this.ctx.fill();
-    }
     //todo: Fix this. Create type for new object made by createCamera. Check if object is of that type then don't run this if it isn't
-    drawStatic(offset) {
-        (<{ baseObj: any }><unknown>this.ctx).baseObj.beginPath();
-        (<{ baseObj: any }><unknown>this.ctx).baseObj.moveTo(this.points[0].x + (offset?.x ?? 0), this.points[0].y + (offset?.y))
-        for (let point of this.points) {
-            (<{ baseObj: any }><unknown>this.ctx).baseObj.lineTo(point.x + (offset?.x ?? 0), point.y + (offset?.y ?? 0));
-        }
-        (<{ baseObj: any }><unknown>this.ctx).baseObj.closePath();
-        (<{ baseObj: any }><unknown>this.ctx).baseObj.fill();
-    }
+    // drawStatic(offset) {
+    //     (<{ baseObj: any }><unknown>this.ctx).baseObj.beginPath();
+    //     (<{ baseObj: any }><unknown>this.ctx).baseObj.moveTo(this.points[0].x + (offset?.x ?? 0), this.points[0].y + (offset?.y))
+    //     for (let point of this.points) {
+    //         (<{ baseObj: any }><unknown>this.ctx).baseObj.lineTo(point.x + (offset?.x ?? 0), point.y + (offset?.y ?? 0));
+    //     }
+    //     (<{ baseObj: any }><unknown>this.ctx).baseObj.closePath();
+    //     (<{ baseObj: any }><unknown>this.ctx).baseObj.fill();
+    // }
     printLines() {
         // for (let line of this.lines) {
         //     console.log(line.toString());
@@ -226,8 +179,7 @@ export class Polygon implements IShape {
     }
 }
 export class Sprite implements IShape {
-    constructor(ctx, image: CanvasImageSource, x: number, y: number, width: number, height: number) {
-        this.image = image;
+    constructor( x: number, y: number, width: number, height: number) {
 
         // this.image = new Image()
         // this.image.src = './images/playButton.png'
@@ -235,18 +187,15 @@ export class Sprite implements IShape {
         this.y = y;
         this.width = width;
         this.height = height;
-        this.polygon = new Polygon(ctx, [
+        this.polygon = new Polygon([
             [x, y], [x + width, y], [x + width, y + height], [x, y + height]
         ])
-        this.ctx = ctx;
     }
-    image: CanvasImageSource;
     x: number;
     y: number;
     width: number;
     height: number;
     polygon: Polygon;
-    ctx: CanvasRenderingContext2D;
 
     collides(shape, debug = false) {
         if (shape instanceof Vector2) {
@@ -287,11 +236,5 @@ export class Sprite implements IShape {
         }
         return this.polygon.collides(shape, debug);
     }
-    draw(offset?) {
-        try {
-            this.ctx.drawImage(this.image, this.x + (offset?.x ?? 0), this.y + (offset?.y ?? 0), this.width, this.height);
-        } catch (e) {
-            console.error("Couldn't draw image", this.image)
-        }
-    }
+   
 }
