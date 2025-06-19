@@ -12,4 +12,7 @@ export declare class Vector2 implements IShape {
     collides(shape: IShape): boolean;
     toString(): string;
     toJSON(): number[];
+    /** rotate in radians */
+    rotate(angle: number): Vector2;
+    transform(a: any, b: any, c: any, d: any): Vector2;
 }

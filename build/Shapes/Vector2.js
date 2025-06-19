@@ -38,4 +38,15 @@ export class Vector2 {
     toJSON() {
         return [this.x, this.y];
     }
+    /** rotate in radians */
+    rotate(angle) {
+        let sin = Math.sin(angle);
+        let cos = Math.cos(angle);
+        return this.transform(cos, -sin, sin, cos);
+    }
+    transform(a, b, c, d) {
+        this.x = (this.x * a) + (this.y * b);
+        this.y = (this.x * c) + (this.y * d);
+        return this;
+    }
 }
