@@ -234,6 +234,15 @@ export class Sprite implements IShape {
                 )
             )
         }
+        if (shape instanceof Sprite) {
+            return (
+                shape.x + shape.width >= this.x
+                && shape.x <= this.x + this.width
+                && shape.y + shape.height >= this.y
+                && shape.y <= this.y + this.height
+            )
+        }
+    
         return this.polygon.collides(shape, debug);
     }
    
