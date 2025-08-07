@@ -202,6 +202,12 @@ export class Sprite {
                     || Vector2.distance(shape.x, shape.y, this.x, this.y + this.height) < shape.radius
                     || Vector2.distance(shape.x, shape.y, this.x + this.width, this.y + this.height) < shape.radius)));
         }
+        if (shape instanceof Sprite) {
+            return (shape.x + shape.width >= this.x
+                && shape.x <= this.x + this.width
+                && shape.y + shape.height >= this.y
+                && shape.y <= this.y + this.height);
+        }
         return this.polygon.collides(shape, debug);
     }
 }

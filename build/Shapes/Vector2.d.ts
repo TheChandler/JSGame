@@ -14,5 +14,5 @@ export declare class Vector2 implements IShape {
     toJSON(): number[];
     /** rotate in radians */
     rotate(angle: number): Vector2;
-    transform(a: any, b: any, c: any, d: any): Vector2;
+    transform(a: number, b: number, c: number, d: number): Vector2;
 }
