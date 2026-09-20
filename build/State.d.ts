@@ -1,7 +1,9 @@
 export declare class State {
     name?: string;
-    click(event: Event): void;
-    mousemove(event: Event): void;
-    contextmenu(event: Event): void;
-    update(): void;
+    engine: any;
+    unsubscribers: (() => void)[];
+    constructor(engine: any);
+    enter(): void;
+    exit(): void;
+    update(dt: any): void;
 }

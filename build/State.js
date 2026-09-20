@@ -1,10 +1,16 @@
 export class State {
-    click(event) {
+    constructor(engine) {
+        this.engine = engine;
+        this.unsubscribers = [];
     }
-    mousemove(event) {
+    enter() {
     }
-    contextmenu(event) {
+    exit() {
+        for (const unbind of this.unsubscribers) {
+            unbind();
+        }
+        this.unsubscribers = [];
     }
-    update() {
+    update(dt) {
     }
 }

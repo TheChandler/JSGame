@@ -3,16 +3,22 @@
 
 export class State {
     name?: string;
-    click(event: Event) {
+    engine: any;
+    unsubscribers: (() => void)[];
+
+    constructor(engine) {
+        this.engine = engine;
+        this.unsubscribers = [] as (() => void)[];
+    }
+    enter() {
 
     }
-    mousemove(event: Event) {
-
+    exit() {
+        for (const unbind of this.unsubscribers) {
+            unbind();
+        }
+        this.unsubscribers = [];
     }
-    contextmenu(event: Event) {
-
-    }
-    update(){
-        
+    update(dt) {
     }
 }

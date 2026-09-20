@@ -1,36 +1,28 @@
 export class Input {
-    constructor() {
+    constructor(engine) {
         this.keys = [];
         this.keys['ArrowLeft'] = false;
         this.keys['ArrowRight'] = false;
         this.keys['ArrowDown'] = false;
         this.keys['ArrowUp'] = false;
-        this.functions = [];
+        this.eventBus = engine.eventBus;
         document.addEventListener('keydown', (event) => {
             let key = event.key;
             this.keys[key] = true;
-            if (this.functions[key]) {
-                this.functions[key]();
-            }
+            this.eventBus.emit("keydown", event);
         });
         document.addEventListener('keyup', (event) => {
             let key = event.key;
             this.keys[key] = false;
+            this.eventBus.emit("keyup", event);
         });
-        document.addEventListener('mousedown', () => {
+        document.addEventListener('mousedown', (event) => {
+            this.eventBus.emit("mousedown", event);
             this.keys['mouseleft'] = true;
         });
-        document.addEventListener('mouseup', () => {
+        document.addEventListener('mouseup', (event) => {
+            this.eventBus.emit("mouseup", event);
             this.keys['mouseleft'] = false;
         });
-    }
-    addFunction(key, func) {
-        this.functions[key] = func;
-    }
-    clear() {
-        this.ArrowLeft = false;
-        this.ArrowRight = false;
-        this.ArrowDown = false;
-        this.ArrowUp = false;
     }
 }
